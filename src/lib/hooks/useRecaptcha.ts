@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
+import { SITE_KEY } from '../../const'
 
 const ID = 'google-recaptcha-v3' // script タグのIDとして使用する任意の文字列
-const SITE_KEY = import.meta.env.RECAPTCHA_SITE_KEY // reCAPTCHA の site key
 
 export type UseReCaptcha = [
   /**
@@ -40,19 +40,19 @@ export const useRecaptcha = (): UseReCaptcha => {
     return new Promise<ReCaptchaV2.ReCaptcha>((resolve) => {
       load()
 
-      if (typeof window.grecaptcha.ready === 'undefined') {
-        window.grecaptcha = window.grecaptcha || {}
-        window.grecaptcha.ready = (cb: () => void) => {
+      if (typeof grecaptcha?.ready === undefined) {
+        grecaptcha = grecaptcha || {}
+        grecaptcha.ready = (cb: () => void) => {
           // @ts-ignore
-          window.___grecaptcha_cfg ??= {}
+          ___grecaptcha_cfg ??= {}
           // @ts-ignore
-          window.___grecaptcha_cfg.fns ??= []
+          ___grecaptcha_cfg.fns ??= []
           // @ts-ignore
-          window.___grecaptcha_cfg.fns.push(cb)
+          ___grecaptcha_cfg.fns.push(cb)
         }
       }
 
-      window.grecaptcha.ready(() => resolve(window.grecaptcha))
+      grecaptcha.ready(() => resolve(grecaptcha))
     })
   }, [load])
 

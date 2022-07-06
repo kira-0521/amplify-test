@@ -1,44 +1,42 @@
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import logo from './logo.svg'
 import './App.css'
+import { useRecaptcha } from './lib/hooks/useRecaptcha'
+import axios from 'axios'
+import {
+  GoogleReCaptchaProvider,
+  useGoogleReCaptcha,
+} from 'react-google-recaptcha-v3'
+import { SITE_KEY } from './const'
+import { GoogleRecaptchaComponent } from './components/GoogleRecaptcha'
 
 function App() {
-  const [count, setCount] = useState(0)
+  // const [load, ready, execute] = useRecaptcha()
+
+  // useEffect(() => load(), [])
+
+  // const handleSubmit = () => {
+  //   execute({ action: 'click' }).then((token) => {
+  //     axios.get('http://127.0.0.1:8000').then((res) => {
+  //       console.log(res.data)
+  //     })
+  //   })
+  // }
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>Hello Vite + React!</p>
-        <p>
-          <button type="button" onClick={() => setCount((count) => count + 1)}>
-            count is: {count}
-          </button>
-        </p>
-        <p>
-          Edit <code>App.tsx</code> and save to test HMR updates.
-        </p>
-        <p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          {' | '}
-          <a
-            className="App-link"
-            href="https://vitejs.dev/guide/features.html"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Vite Docs
-          </a>
-        </p>
-      </header>
-    </div>
+    <GoogleReCaptchaProvider
+      reCaptchaKey={SITE_KEY}
+      scriptProps={{
+        async: true, // optional, default to false,
+        defer: false, // optional, default to false
+        appendTo: 'head', // optional, default to "head", can be "head" or "body",
+      }}>
+      <div className='App'>
+        app
+        <GoogleRecaptchaComponent />
+        {/* <button onClick={handleSubmit}>クリック</button> */}
+      </div>
+    </GoogleReCaptchaProvider>
   )
 }
 
