@@ -11,17 +11,19 @@ import { SITE_KEY } from './const'
 import { GoogleRecaptchaComponent } from './components/GoogleRecaptcha'
 
 function App() {
-  // const [load, ready, execute] = useRecaptcha()
+  const onClickPutTest = async () => {
+    const result = await axios.put('http://127.0.0.1:8000/put', {
+      data: 'put',
+    })
+    console.log('result', result)
+  }
 
-  // useEffect(() => load(), [])
-
-  // const handleSubmit = () => {
-  //   execute({ action: 'click' }).then((token) => {
-  //     axios.get('http://127.0.0.1:8000').then((res) => {
-  //       console.log(res.data)
-  //     })
-  //   })
-  // }
+  const onClickPostTest = async () => {
+    const result = await axios.post('http://127.0.0.1:8000/post', {
+      data: 'post',
+    })
+    console.log('result', result)
+  }
 
   return (
     <GoogleReCaptchaProvider
@@ -35,6 +37,8 @@ function App() {
         app
         <GoogleRecaptchaComponent />
         {/* <button onClick={handleSubmit}>クリック</button> */}
+        <button onClick={onClickPutTest}>PUTテスト</button>
+        <button onClick={onClickPostTest}>POSTテスト</button>
       </div>
     </GoogleReCaptchaProvider>
   )
