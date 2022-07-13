@@ -11,34 +11,45 @@ import { SITE_KEY } from './const'
 import { GoogleRecaptchaComponent } from './components/GoogleRecaptcha'
 
 function App() {
-  const onClickPutTest = async () => {
-    const result = await axios.put('http://127.0.0.1:8000/put', {
-      data: 'put',
-    })
-    console.log('result', result)
-  }
+  const [isScript, setIsScript] = useState(false)
+  const [captchaDom, setCaptchaDom] = useState(null)
 
-  const onClickPostTest = async () => {
-    const result = await axios.post('http://127.0.0.1:8000/post', {
-      data: 'post',
-    })
-    console.log('result', result)
-  }
+  useEffect(() => {
+    const head = document.getElementsByTagName('head')
+    const config = { attributes: true, childList: true, subtree: true }
+    const cb = () => {
+      const ary = Array.from(head[0].children)
+      if (ary.find((child) => child.id === 'google-recaptcha-v3')) {
+        setIsScript(true)
+      }
+    }
+    const observer = new MutationObserver(cb)
+    observer.observe(head[0], config)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
+
+  useEffect(() => {
+    if (isScript) {
+      const btn = document.getElementById('button-verify')
+      const captcha =
+        document.querySelector<HTMLDivElement>('.grecaptcha-badge')
+      if (captcha) {
+        captcha.style.position = 'relative'
+        console.log(captcha)
+        btn?.after(captcha)
+      }
+    }
+  }, [isScript])
 
   return (
-    <GoogleReCaptchaProvider
-      reCaptchaKey={SITE_KEY}
-      scriptProps={{
-        async: true, // optional, default to false,
-        defer: false, // optional, default to false
-        appendTo: 'head', // optional, default to "head", can be "head" or "body",
-      }}>
+    <GoogleReCaptchaProvider reCaptchaKey={SITE_KEY} language='japanese'>
       <div className='App'>
         app
         <GoogleRecaptchaComponent />
         {/* <button onClick={handleSubmit}>クリック</button> */}
-        <button onClick={onClickPutTest}>PUTテスト</button>
-        <button onClick={onClickPostTest}>POSTテスト</button>
       </div>
     </GoogleReCaptchaProvider>
   )

@@ -27,5 +27,9 @@ export const GoogleRecaptchaComponent = () => {
   // useEffect(() => {
   //   handleReCaptchaVerify()
   // }, [handleReCaptchaVerify])
-  return <button onClick={handleReCaptchaVerify}>Verify recaptcha</button>
+  return (
+    <button id='button-verify' onClick={handleReCaptchaVerify}>
+      Verify recaptcha
+    </button>
+  )
 }
